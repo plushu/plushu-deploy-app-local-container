@@ -12,9 +12,9 @@ if [[ -f "$cidfile" ]]; then
   rm "$cidfile"
 fi
 
-dockerargs=`$PLUSHU_ROOT/lib/runhook run-app-docker-args "$app"`
-docker run -d --cidfile="$cidfile" -p 5000 -e PORT=5000 $dockerargs \
-  $(<"$app_dir/release.iid") /start web
+($PLUSHU_ROOT/lib/runhook run-app-docker-args "$app";
+  echo "$(<$app_dir/release.iid) /start web") |
+  xargs docker run -d --cidfile="$cidfile" -p 5000 -e PORT=5000
 
 port=$(docker port $(<"$cidfile") 5000 | sed 's/0.0.0.0://')
 echo "$port" > "$app_dir/PORT"
