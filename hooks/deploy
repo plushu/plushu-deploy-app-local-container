@@ -5,6 +5,8 @@ app=$1
 app_dir=$PLUSHU_ROOT/apps/$app
 cidfile=$app_dir/proc/web.cid
 
+mkdir -p "$app_dir/proc"
+
 # kill the app when running
 if [[ -f "$cidfile" ]]; then
   oldcid=$(<"$cidfile")
