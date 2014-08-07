@@ -15,7 +15,7 @@ if [[ -f "$cidfile" ]]; then
 fi
 
 ($PLUSHU_ROOT/lib/runhook run-app-docker-args "$app";
-  echo "$(<"$app_dir/release.iid") /start web") |
+  printf '%s /start web\n' "$(<"$app_dir/release.iid")") |
   xargs -x docker run -d --cidfile="$cidfile" -e PORT=5000 --expose=5000
 
 $PLUSHU_ROOT/lib/runhook vhost "$app"
