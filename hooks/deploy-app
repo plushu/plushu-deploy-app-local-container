@@ -18,4 +18,4 @@ fi
   printf '%s /start web\n' "$(<"$app_dir/release.iid")"; } |
   xargs -x docker run -d --cidfile="$cidfile" -e PORT=5000 --expose=5000
 
-"$PLUSHU_ROOT/lib/plushook" vhost "$app"
+"$PLUSHU_ROOT/lib/plushook" vhost-app "$app"
