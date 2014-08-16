@@ -16,6 +16,6 @@ fi
 
 { "$PLUSHU_ROOT/lib/plushook" run-app-docker-opts "$app";
   printf '%s /start web\n' "$(<"$app_dir/release.iid")"; } |
-  xargs -x docker run -d --cidfile="$cidfile" -e PORT=5000 --expose=5000
+  xargs -x docker run -d -e PORT=5000 --expose=5000 >"$cidfile"
 
 "$PLUSHU_ROOT/lib/plushook" vhost-app "$app"
