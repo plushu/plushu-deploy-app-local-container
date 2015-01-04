@@ -1,4 +1,4 @@
-# plushu-start-web-deploy
+# plushu-deploy-app-local-container
 
 Plushu deploy hook that runs the "web" process of a built App Container
 locally.
