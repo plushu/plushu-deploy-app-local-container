@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+set -eo pipefail; [[ -n "$PLUSHU_TRACE" ]] && set -x
+
+app="$1"
+app_dir="$PLUSHU_APPS_DIR/$app"
+cidfile="$app_dir/proc/web.cid"
+
+# If there's a release to run and it's not currently running
+if [[ -f "$app_dir/release.iid" && ! -f "$cidfile" ]]; then
+  mkdir -p "$app_dir/proc"
+
+  { "$PLUSHU_ROOT/lib/plushook" run-app-docker-opts "$app";
+    printf '\n%s /start web\n' "$(<"$app_dir/release.iid")"; } |
+    xargs -x docker run -d -e PORT=5000 --expose=5000 >"$cidfile"
+
+  "$PLUSHU_ROOT/lib/plushook" vhost-app "$app"
+
+  # If we're replacing a container that should be shut down
+  if [[ -f "$app_dir/replacing.cid" ]]; then
+    oldcid="$(<"$app_dir/replacing.cid")"
+    docker stop "$oldcid" > /dev/null && docker rm "$oldcid" > /dev/null
+    rm "$app_dir/replacing.cid"
+  fi
+fi

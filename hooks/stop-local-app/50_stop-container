@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -eo pipefail; [[ -n "$PLUSHU_TRACE" ]] && set -x
+
+app="$1"
+app_dir="$PLUSHU_APPS_DIR/$app"
+cidfile="$app_dir/proc/web.cid"
+
+# kill the app when running
+if [[ -f "$cidfile" ]]; then
+  oldcid="$(<"$cidfile")"
+  docker stop "$oldcid" > /dev/null && docker rm "$oldcid" > /dev/null
+  rm "$cidfile"
+fi

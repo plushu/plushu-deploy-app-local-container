@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+set -eo pipefail; [[ -n "$PLUSHU_TRACE" ]] && set -x
+
+app="$1"
+app_dir="$PLUSHU_APPS_DIR/$app"
+
+# If there's a release to run
+if [[ -f "$app_dir/release.iid" ]]; then
+  # if the app needs hard stop-start restarting without failover
+  if [[ -f "$app_dir/SINGLE_INSTANCE" ]]; then
+    "$PLUSHU_ROOT/lib/plushook" stop-local-app "$app"
+    "$PLUSHU_ROOT/lib/plushook" start-local-app "$app"
+  else
+    # sunset any currently-running container
+    [[ -f "$app_dir/proc/web.cid" ]] &&
+      mv -f "$app_dir/proc/web.cid" "$app_dir/replacing.cid"
+    # start a new container to replace it
+    "$PLUSHU_ROOT/lib/plushook" start-local-app "$app"
+  fi
+fi
