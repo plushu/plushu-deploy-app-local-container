@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 set -eo pipefail; [[ -n "$PLUSHU_TRACE" ]] && set -x
 
-"$PLUSHU_ROOT/lib/plushook" restart-local-app "$app"
+"$PLUSHU_ROOT/lib/plushook" restart-local-app "$1"

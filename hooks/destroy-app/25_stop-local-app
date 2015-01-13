@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 set -eo pipefail; [[ -n "$PLUSHU_TRACE" ]] && set -x
 
-"$PLUSHU_ROOT/lib/plushook" stop-local-app "$app"
+"$PLUSHU_ROOT/lib/plushook" stop-local-app "$1"
