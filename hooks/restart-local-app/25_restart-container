@@ -12,8 +12,9 @@ if [[ -f "$app_dir/release.iid" ]]; then
     "$PLUSHU_ROOT/lib/plushook" start-local-app "$app"
   else
     # sunset any currently-running container
-    [[ -f "$app_dir/proc/web.cid" ]] &&
+    if [[ -f "$app_dir/proc/web.cid" ]]; then
       mv -f "$app_dir/proc/web.cid" "$app_dir/replacing.cid"
+    fi
     # start a new container to replace it
     "$PLUSHU_ROOT/lib/plushook" start-local-app "$app"
   fi
