@@ -17,13 +17,7 @@ if [[ -f "$app_dir/release.iid" && ! -f "$cidfile" ]]; then
 
   # If we're replacing a container that should be shut down
   if [[ -f "$app_dir/replacing.cid" ]]; then
-    oldcid="$(<"$app_dir/replacing.cid")"
-
-    # Stop the old container (or be cool if it's already stopped)
-    docker stop "$oldcid" > /dev/null || :
-
-    # Remove the old container
-    docker rm "$oldcid" > /dev/null
-    rm "$app_dir/replacing.cid"
+    # shut that old container down
+    "$PLUSHU_ROOT/lib/plushook" docker-rm-cidfile "$app_dir/replacing.cid"
   fi
 fi

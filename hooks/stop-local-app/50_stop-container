@@ -7,12 +7,5 @@ cidfile="$app_dir/proc/web.cid"
 
 # kill the app when running
 if [[ -f "$cidfile" ]]; then
-  oldcid="$(<"$cidfile")"
-
-  # Stop the old container (or be cool if it's already stopped)
-  docker stop "$oldcid" > /dev/null || :
-
-  # Remove the old container
-  docker rm "$oldcid" > /dev/null
-  rm "$cidfile"
+    "$PLUSHU_ROOT/lib/plushook" docker-rm-cidfile "$cidfile"
 fi
