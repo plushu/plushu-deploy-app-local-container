@@ -3,7 +3,8 @@ set -eo pipefail; [[ -n "$PLUSHU_TRACE" ]] && set -x
 
 app="$1"
 app_dir="$PLUSHU_APPS_DIR/$app"
-cidfile="$app_dir/proc/web.cid"
+proc_name="web"
+cidfile="$app_dir/proc/$proc_name.cid"
 
 # kill the app when running
 if [[ -f "$cidfile" ]]; then

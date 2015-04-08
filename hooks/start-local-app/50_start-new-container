@@ -3,21 +3,22 @@ set -eo pipefail; [[ -n "$PLUSHU_TRACE" ]] && set -x
 
 app="$1"
 app_dir="$PLUSHU_APPS_DIR/$app"
-cidfile="$app_dir/proc/web.cid"
+proc_name="web"
+cidfile="$app_dir/proc/$proc_name.cid"
 
 # If there's a release to run and it's not currently running
 if [[ -f "$app_dir/release.iid" && ! -f "$cidfile" ]]; then
   mkdir -p "$app_dir/proc"
 
   { "$PLUSHU_ROOT/lib/plushook" run-app-docker-opts "$app";
-    printf '\n%s /start web\n' "$(<"$app_dir/release.iid")"; } |
+    printf '\n%s /start %s\n' "$(<"$app_dir/release.iid")" "$proc_name"; } |
     xargs -x docker run -d -e PORT=5000 --expose=5000 >"$cidfile"
 
   "$PLUSHU_ROOT/lib/plushook" vhost-app "$app"
 
-  # If we're replacing a container that should be shut down
-  if [[ -f "$app_dir/replacing.cid" ]]; then
+  # If we're replacing a web container that should be shut down
+  if [[ -f "$app_dir/old-web.cid" ]]; then
     # shut that old container down
-    "$PLUSHU_ROOT/lib/plushook" docker-rm-cidfile "$app_dir/replacing.cid"
+    "$PLUSHU_ROOT/lib/plushook" docker-rm-cidfile "$app_dir/old-web.cid"
   fi
 fi
