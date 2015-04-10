@@ -21,8 +21,8 @@ if [[ -f "$app_dir/release.iid" && ! -f "$cidfile" ]]; then
 
     # stop the container and allow plugin(s) to archive its logs
     docker stop "$(<"$app_dir/old-web.cid")"
-    docker logs -t "$(<"$app_dir/old-web.cid")" |
-      "$PLUSHU_ROOT/lib/plushook" archive-app-proc-log "$app" "web"
+    docker logs -t "$(<"$app_dir/old-web.cid")" ||: |
+      "$PLUSHU_ROOT/lib/plushook" -i archive-app-proc-log "$app" "web"
 
     # remove the old container
     "$PLUSHU_ROOT/lib/plushook" docker-rm-cidfile "$app_dir/old-web.cid"
