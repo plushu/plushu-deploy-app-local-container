@@ -11,7 +11,7 @@ if [[ -f "$cidfile" ]]; then
 
     # stop the container and allow plugin(s) to archive its logs
     docker stop "$(<"$cidfile")" > /dev/null
-    docker logs -t "$(<"$cidfile")" | "$PLUSHU_ROOT/lib/plushook" -i \
+    docker logs -t "$(<"$cidfile")" 2>&1 | "$PLUSHU_ROOT/lib/plushook" -i \
       archive-app-proc-log "$app" "$proc_name" ||:
 
     # remove the old container
